@@ -1,140 +1,141 @@
 # Fredsidian
 
-**Fredsidian** is an open source architecture for building **Obsidian-style memory** for AI assistants.
+**Fredsidian** is a memory architecture for AI assistants that combines a **trusted operational memory core** with a broader **Obsidian-style markdown knowledge graph**.
 
-It combines:
-- **assistant operational memory** for high-signal continuity and assistant-specific state
-- **Obsidian knowledge graph memory** for linked notes, projects, research, decisions, and long-term context
+The idea is simple: an assistant should not have to choose between brittle chat history and an unbounded note vault.
 
-If you are looking for:
-- Obsidian memory for AI agents
-- Obsidian second brain for assistants
-- markdown-based long-term memory
-- local knowledge graph memory for autonomous assistants
-- hybrid assistant memory architecture
+Fredsidian separates the two jobs:
+- a small, explicit memory layer for operational truth
+- a larger linked markdown graph for projects, research, decisions, and long-term context
 
-that is exactly what Fredsidian is designed to explore.
-
-The goal is simple:
-- keep Fred operationally reliable
-- gain the benefits of an Obsidian second brain
-- avoid mixing volatile assistant state with the entire personal knowledge vault too early
-
-## What Fredsidian Is
-
-Fredsidian is a design for using an **Obsidian-style second brain as long-term assistant memory** without losing the safety and clarity of a smaller operational memory core.
-
-Instead of forcing an AI assistant to rely only on chat history or a single flat memory file, Fredsidian proposes:
-- a trusted assistant memory layer for operational truth
-- an Obsidian-compatible markdown knowledge graph for broader long-term context
-- scoped retrieval rules for privacy, accuracy, and maintainability
-
-This makes Fredsidian useful for people building:
+That makes it useful for builders working on:
 - AI personal assistants
 - local-first memory systems
+- markdown-based agent memory
+- retrieval systems for long-running assistants
 - Obsidian-integrated agent workflows
-- markdown knowledge graph memory systems
-- retrieval-augmented memory for autonomous agents
 
-## Design Principles
+## Why this exists
 
-- assistant memory and PKM are related, but not identical
-- operational truth should stay small, explicit, and trusted
-- Obsidian should provide rich linked context, not replace core safety and continuity rules
-- retrieval should be scoped, evidence-based, and privacy-aware
-- start read-mostly, expand to write workflows later
+Most assistant memory approaches collapse very different needs into one bucket.
 
-## Core Model
+That creates predictable problems:
+- important operating rules get buried in noisy context
+- long-term notes are treated as equally trustworthy as hard operational facts
+- assistants lose continuity or become overconfident
+- personal knowledge vaults get mixed with assistant state too early and too broadly
 
-Fredsidian uses a **two-tier memory system**:
+Fredsidian is an attempt to solve that cleanly.
 
-### Tier 1: Fred Core Memory
-Used for:
+Instead of treating memory as one flat store, it treats assistant memory as **two different systems with different trust levels and retrieval rules**.
+
+## Core idea
+
+Fredsidian uses a **two-tier memory model**.
+
+### 1. Core operational memory
+This is the high-trust layer.
+
+Use it for:
 - assistant operating rules
-- delivery preferences
+- durable user preferences
+- important recurring tasks
 - safety boundaries
-- recurring assistant tasks
-- short, durable user preferences
+- short curated memory
 - daily operational logs
-- high-signal curated memory
 
-Suggested storage:
+Examples:
 - `MEMORY.md`
 - `memory/YYYY-MM-DD.md`
 
-### Tier 2: Obsidian Graph Memory
-Used for:
-- projects
+This layer should stay:
+- small
+- explicit
+- durable
+- easy to audit
+
+### 2. Obsidian-style graph memory
+This is the broader context layer.
+
+Use it for:
+- project notes
 - research
-- people and entities
 - decision records
-- reference notes
-- long-form planning
-- linked daily/project context
+- people and entity notes
+- linked plans
+- long-form context
+- reusable references
 
-Suggested storage:
-- Obsidian vault folders and markdown notes
+This layer should be:
+- rich
+- linked
+- searchable
+- scoped
+- retrieval-aware
 
-## Retrieval Order
+## Design principles
 
-When Fred needs context:
+- operational truth should stay small and trusted
+- broader context should be rich, linked, and markdown-native
+- retrieval should be scoped, evidence-based, and privacy-aware
+- assistant memory and PKM are related, but not identical
+- read-mostly is the safest starting point
+- write-back should be explicit, not magical
 
-1. Check **core assistant memory** first for operational truth
-2. Check **Obsidian graph memory** for broader context and linked knowledge
-3. Distinguish between:
+## Retrieval model
+
+When an assistant needs context, Fredsidian recommends this order:
+
+1. Check core memory first for operational truth
+2. Check graph memory second for broader context
+3. Separate:
    - facts
    - hypotheses
    - next checks
-4. Return the smallest useful synthesis with source references when possible
+4. return the smallest useful synthesis, ideally with source references
 
-## Write Policy
+This prevents broad personal context from overriding explicit assistant instructions or durable operating facts.
 
-### Core assistant memory writes
-Allowed for:
-- explicit remember-this requests
-- durable preferences
-- important assistant-operational facts
+## Write policy
+
+### Core memory writes
+Appropriate for:
+- explicit “remember this” requests
+- stable preferences
+- operationally important facts
 - daily logs
 
-### Obsidian writes
-Preferred for:
-- project summaries
+### Graph memory writes
+Appropriate for:
 - research notes
-- linked plans
-- decision notes
-- reusable references
-- draft artifacts
+- project summaries
+- planning docs
+- decision logs
+- structured references
+- reusable knowledge artifacts
 
 ### Guardrails
-- do not silently rewrite broad vault content
-- do not write secrets unless explicitly required
-- do not expose personal vault content in shared contexts
-- require approval before broad externalized or high-impact changes
+- do not silently rewrite large parts of a vault
+- do not assume all notes are equally trusted
+- do not expose private vault content in shared contexts
+- require approval before broad or high-impact write-back
 
-## Recommended V1 Scope
+## Recommended v1 scope
 
 Fredsidian v1 should be:
 - read-mostly
-- scoped to specific folders
+- local-first
+- markdown-native
 - explicit about privacy boundaries
-- usable without vector databases or plugin sprawl
+- useful without requiring vector databases or plugin sprawl
 
-V1 should **not** try to:
+Fredsidian v1 should **not** try to:
 - replace all assistant memory
-- automatically rewrite the whole vault
-- infer trust across every note in the vault
+- auto-ingest an entire vault without boundaries
+- silently rewrite knowledge systems
+- pretend broad recall is the same thing as trusted operational continuity
 
-## Future Expansion
-
-Potential v2/v3 additions:
-- scoped write-back into `Assistant/` folders
-- Local REST API integration for structured vault access
-- semantic indexing / embeddings for improved retrieval
-- note templates for project, person, and decision pages
-- retrieval confidence ranking
-- provenance and citation support
-
-## Open Source Project Structure
+## Project structure
 
 ```text
 fredsidian/
@@ -155,19 +156,33 @@ fredsidian/
       daily-note.md
 ```
 
-## Search Keywords / Discovery
+## Who this is for
 
-Relevant terms this project intentionally addresses:
-- Obsidian memory for AI
-- Obsidian-style memory
-- Obsidian second brain for agents
-- AI assistant memory architecture
-- markdown memory system
-- local-first AI memory
-- knowledge graph memory for assistants
-- personal assistant memory graph
-- hybrid memory architecture for AI agents
+Fredsidian is aimed at people building assistants that need to operate over time without turning memory into a blob.
+
+Especially if you care about:
+- trust boundaries
+- long-term continuity
+- local-first systems
+- markdown-native workflows
+- Obsidian-compatible knowledge graphs
+- operational reliability over flashy demos
 
 ## Status
 
-This repo is currently a design/spec project, not an implementation release.
+Fredsidian is currently a **design/spec project**, not a packaged implementation release.
+
+That is intentional.
+
+The goal right now is to make the architecture sharp enough that implementation choices later stay clean.
+
+## Keywords
+
+Relevant discovery terms this project addresses:
+- Obsidian memory for AI
+- Obsidian-style assistant memory
+- markdown memory for agents
+- local-first AI memory
+- AI assistant memory architecture
+- knowledge graph memory for assistants
+- second-brain workflows for AI systems
