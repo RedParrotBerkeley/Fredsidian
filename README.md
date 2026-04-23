@@ -194,3 +194,8 @@ Relevant discovery terms this project addresses:
 - **Core capability:** Two-tier memory architecture separating trusted operational memory from markdown graph context.
 - **Primary stack:** Markdown-first architecture with AI assistant memory patterns.
 - **Status:** Active design and implementation exploration.
+
+
+## Related projects
+
+- [agent-black-box](https://github.com/mikepatraw/agent-black-box) — run replay, diff, and incident tooling for agents.\n- [rx-guard](https://github.com/mikepatraw/rx-guard) — healthcare-focused agent workflow project.\n- [WatchClaw](https://github.com/mikepatraw/WatchClaw) — security-minded OpenClaw scanner.
