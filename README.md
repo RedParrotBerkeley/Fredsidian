@@ -186,3 +186,11 @@ Relevant discovery terms this project addresses:
 - AI assistant memory architecture
 - knowledge graph memory for assistants
 - second-brain workflows for AI systems
+
+
+## Portfolio snapshot
+
+- **Problem:** Assistant memory systems often blend high-trust operational rules with noisy long-form notes.
+- **Core capability:** Two-tier memory architecture separating trusted operational memory from markdown graph context.
+- **Primary stack:** Markdown-first architecture with AI assistant memory patterns.
+- **Status:** Active design and implementation exploration.
